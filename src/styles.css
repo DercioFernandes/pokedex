@@ -32,3 +32,16 @@
 .bug{
   background-color: chartreuse;
 }
+
+.pagination {
+  display: absolute;
+}
+
+.pagination button {
+  background-color: white;
+  padding: 1%;
+}
+
+.pagination button:hover {
+  background-color: #eee;
+}
