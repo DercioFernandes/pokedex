@@ -1,5 +1,7 @@
 import React from "react";
 import "./styles.css";
+import PokemonDetails from './routes/PokemonDetails.js';
+import { BrowserRouter as Router, Switch, Route, Link, useParams } from "react-router-dom";
 import('https://fonts.cdnfonts.com/css/pokemon-solid');
 
 class App extends React.Component {
@@ -47,10 +49,19 @@ class App extends React.Component {
 
   render() {
     return (
-      <div>
-        <PokeList pokemons={this.state.pokemons} />
-        <Pagination currentPage={this.state.currentPage} totalPages={this.state.totalPages} onPageChange={this.handlePageChange} />
-      </div>
+      <Router>
+        <div>
+          <Switch>
+            <Route exact path="/">
+              <PokeList pokemons={this.state.pokemons} />
+              <Pagination currentPage={this.state.currentPage} totalPages={this.state.totalPages} onPageChange={this.handlePageChange} />
+            </Route>
+            <Route path="/pokemon/:id">
+              <PokemonDetails pokemons={this.state.pokemons} />
+            </Route>
+          </Switch>
+        </div>
+      </Router>
     );
   }
 }
@@ -65,17 +76,19 @@ const PokeList = ({ pokemons }) => {
   return (
     <div>
       {pokemons.map(pokemon => (
-        <Pokemon key={pokemon.id} name={pokemon.name} sprite={pokemon.sprites.front_default} types={pokemon.types} />
+        <Pokemon key={pokemon.id} name={pokemon.name} sprite={pokemon.sprites.front_default} types={pokemon.types} id={pokemon.id} />
       ))}
     </div>
   );
 };
 
-export const Pokemon = ({ name, sprite, types }) => {
+const Pokemon = ({ name, sprite, types, id }) => {
   return (
-    <div className={"poke-card " + types[0].type.name} >
-      {" "}
-      <img alt="Pokemon sprite" src={sprite} /> <h3>{name}</h3>{" "}
+    <div className={"poke-card " + types[0].type.name}>
+      <Link to={`/pokemon/${id}`}>
+        <img alt="Pokemon sprite" src={sprite} />
+        <h3>{name}</h3>
+      </Link>
     </div>
   );
 };
@@ -105,6 +118,9 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
     </nav>
   );
 };
+
+
+
 
 
 export default App;
